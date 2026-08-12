@@ -2,17 +2,28 @@
 
 ### AI-Assisted Failure Analysis for Engineering Systems
 
-**FMEA Engineer** is an AI-assisted engineering analysis tool that combines my interests in **Computer Engineering, AI, embedded systems, and robotics**.
+> "Engineering becomes more powerful when AI can help us reason about how systems fail."
 
-It transforms an engineering system description into a structured **Failure Mode and Effects Analysis (FMEA)**. Using **Python and Backboard**, the system identifies failure modes, traces failure propagation, prioritizes risks, recommends mitigations, and generates a structured engineering report.
+FMEA Engineer is an **AI-assisted engineering analysis tool** I built to explore the intersection of **Computer Engineering, AI, embedded systems, and robotics**.
+
+It transforms an engineering system description into a structured **Failure Mode and Effects Analysis (FMEA)**. Using **Python and Backboard**, the system identifies potential failures, traces how they propagate through the system, prioritizes risks, and recommends mitigation and verification approaches.
 
 The reference system is an **Arduino autonomous robot** using an ultrasonic sensor, Arduino controller, L298N motor driver, DC motors, and battery.
 
 ## Why I Built This
 
-I wanted to explore how AI can assist engineers in reasoning about **system failures**, rather than simply generating code or text.
+I wanted to explore how AI could be applied to a real engineering problem rather than simply generating code or text.
 
-The project focuses on connecting AI-assisted reasoning with real engineering concepts such as risk assessment, failure propagation, and verification.
+In an engineering system, one component failure can affect several other components. FMEA Engineer focuses on understanding these relationships and following a failure from its initial cause to its possible system-level consequence.
+
+I wanted the system to answer questions such as:
+
+* What can fail?
+* Why can it fail?
+* What happens when it fails?
+* How can the risk be prioritized?
+* How could the failure be safely verified?
+* What information is still unknown?
 
 ## Workflow
 
@@ -25,22 +36,14 @@ Failure Modes & Propagation
         ↓
 Risk Assessment
         ↓
+Mitigation & Verification
+        ↓
 Engineering Report
 ```
 
-## Key Features
+A shared **Backboard thread** is used across the reasoning stages so that each stage builds on the previous analysis.
 
-* System decomposition
-* Failure mode identification
-* Failure propagation analysis
-* Severity, Occurrence & Detection assessment
-* RPN-based risk prioritization
-* Mitigation recommendations
-* Safe verification planning
-* Explicit assumptions and information gaps
-* Automated Markdown report generation
-
-## Example Failure Chain
+## Example Failure Propagation
 
 ```text
 Sensor Failure
@@ -56,9 +59,24 @@ Motor Output
 System Consequence
 ```
 
+This allows the analysis to consider not only individual component failures, but also how failures can propagate through an interconnected system.
+
+## Key Features
+
+* System decomposition and dependency analysis
+* AI-assisted failure mode identification
+* Failure propagation analysis
+* Severity, Occurrence, and Detection assessment
+* Risk Priority Number (RPN) calculation
+* Risk prioritization
+* Engineering mitigation recommendations
+* Safe verification planning
+* Explicit assumptions and information gaps
+* Automated Markdown report generation
+
 ## Risk Assessment
 
-FMEA Engineer evaluates:
+The system evaluates:
 
 * **Severity**
 * **Occurrence**
@@ -69,7 +87,7 @@ FMEA Engineer evaluates:
 RPN = Severity × Occurrence × Detection
 ```
 
-Risk scores are **AI-assisted engineering estimates**, not measured reliability data.
+The scores are **AI-assisted engineering estimates**, not measured reliability data.
 
 ## Technology Stack
 
@@ -79,7 +97,7 @@ Risk scores are **AI-assisted engineering estimates**, not measured reliability 
 * Backboard Threads
 * Markdown
 
-Engineering concepts include **FMEA, embedded systems, robotics, sensor systems, motor control, and engineering verification**.
+The project applies concepts from **FMEA, embedded systems, robotics, sensor systems, motor control, risk analysis, and engineering verification**.
 
 ## Project Structure
 
@@ -94,7 +112,7 @@ fmea-engineer/
 └── .gitignore
 ```
 
-## Setup
+## Getting Started
 
 ### Install Dependencies
 
@@ -102,7 +120,7 @@ fmea-engineer/
 pip install backboard-sdk
 ```
 
-### Run
+### Run the Analysis
 
 ```powershell
 python fmea_engineer.py "Arduino autonomous robot using an ultrasonic sensor, Arduino controller, L298N motor driver, DC motors, and battery"
@@ -114,19 +132,37 @@ The generated report is saved as:
 fmea-report.md
 ```
 
-## Limitations
+## Engineering Limitations
 
-The analysis depends on the information provided about the system. Unknown specifications are treated as **information gaps rather than invented values**.
+The analysis depends on the information provided about the system.
 
-This project supports engineering reasoning but does not replace engineering review, physical testing, or safety certification.
+Unknown specifications are treated as **information gaps rather than invented values**.
+
+Examples include:
+
+* Battery specifications
+* Sensor model and range
+* Motor ratings
+* Motor-driver ratings
+* Thermal limits
+* Firmware and control logic
+* Environmental conditions
+
+This project supports **engineering reasoning**, but it does not replace engineering review, physical testing, or safety certification.
 
 ## Future Development
 
 * Interactive engineering interface
 * Failure-propagation visualization
 * Risk dashboards
-* Additional robotic and embedded systems
+* Support for additional robotic and embedded systems
 * Integration with real engineering test data
+
+## What This Project Represents
+
+FMEA Engineer is part of my exploration of how **AI can be combined with Computer Engineering and robotics to solve practical engineering problems**.
+
+Rather than treating AI as only a coding assistant, this project explores its potential as a tool for **structured engineering reasoning and decision support**.
 
 ## Author
 
