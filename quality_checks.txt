@@ -1,0 +1,1 @@
+{'report_exists': True, 'sections_present': True, 'columns_present': True, 'information_gaps': True, 'limitations': True, 'safe_tests': True, 'specific_system': True}
