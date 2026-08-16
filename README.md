@@ -340,17 +340,7 @@ cd fmea-engineer
 cd frontend
 npm install
 
-### 3. Configure Environment Variables
-
-Create:
-
-frontend/.env
-
-Add the required Backboard credentials to the environment variables.
-
-**Never commit API keys or secrets to GitHub.**
-
-### 4. Run the Development Server
+### 3. Run the Development Server
 
 npm run dev
 
@@ -358,7 +348,7 @@ The application will normally be available at:
 
 http://localhost:3000
 
-### 5. Open the Analysis Interface
+### 4. Open the Analysis Interface
 
 Navigate to:
 
