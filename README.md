@@ -316,8 +316,11 @@ fmea-engineer/
 │   │   ├── FinalCTA.tsx
 │   │   ├── Footer.tsx
 │   │   └── Workflow.tsx
-│   ├── package.json
-│   └── ...
+│   └── package.json
+│
+├── docs/
+│   └── screenshots/
+│
 ├── fmea_engineer.py
 ├── debug_run.py
 ├── assistant.json
@@ -374,8 +377,6 @@ The system can use this description to generate a structured FMEA covering syste
 
 Potential future improvements include:
 
-- Interactive failure-propagation visualization
-- Engineering risk dashboards
 - More advanced risk filtering
 - Additional robotic and embedded-system templates
 - Integration with real engineering test data
