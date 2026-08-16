@@ -2,156 +2,233 @@
 
 ## 1. System Overview
 
-The battery-powered autonomous mobile robot is designed for indoor navigation, consisting of:
-- **12V Lithium-Ion Battery Pack with BMS:** Provides system power and manages battery status.
-- **Arduino Mega Controller:** Central control, executing navigation algorithms.
-- **Ultrasonic Distance Sensors:** Detect obstacles.
-- **L298N Motor Driver:** Drives the motors using PWM signals.
-- **12V DC Geared Motors and Wheels:** Provide mobility.
-- **Chassis:** Structural support.
-- **Voltage Regulation Circuitry:** Ensures stable power delivery.
-- **Embedded Control Software:** Manages navigation, obstacle detection, and power management.
+The autonomous Arduino robot uses:
+- **Arduino Controller:** Executes control algorithms and processes sensor data.
+- **HC-SR04 Ultrasonic Sensor:** Detects obstacles by measuring distances.
+- **L298N Motor Driver:** Drives the two DC motors.
+- **DC Motors:** Facilitate robot movement.
+- **Rechargeable Battery:** Supplies power to the entire system.
+- **Voltage Regulation:** Maintains stable voltage delivery to components.
+- **Embedded Control Software:** Implements logic for navigation decisions.
 
 ## 2. System Components and Functions
 
-Components include the battery pack, Arduino controller, sensors, motor driver, motors, chassis, voltage regulation, and control software. Each ensures the robot can navigate, avoid obstacles, and maintain power stability.
+- **Arduino Controller:** Processes inputs and issues commands.
+- **HC-SR04 Sensor:** Sends distance data to Arduino.
+- **L298N Driver:** Receives commands from Arduino, powers motors.
+- **DC Motors:** Convert electrical signals into mechanical motion.
+- **Battery:** Powers all components.
+- **Regulation Circuit:** Conditions power from the battery.
+- **Control Software:** Determines robot movement based on data.
 
 ## 3. Interfaces and Dependencies
 
-- **Power Distribution:** Battery → Voltage Regulation → Arduino, Sensors, Motor Driver.
-- **Control and Communication:** Arduino ↔ Sensors; Arduino → Motor Driver.
-- **Mechanical:** Motors → Wheels → Chassis.
+- **Arduino ↔ HC-SR04:** Sensor data communication for obstacle detection.
+- **Arduino ↔ Motor Driver:** Command exchange for motor control.
+- **Motor Driver ↔ Motors:** Power delivery for motion.
+- **Battery ↔ Components:** Provides necessary energy to system.
+- **Regulation Circuit ↔ Sensitive Components:** Ensures stable voltage.
 
 ## 4. Assumptions and Information Gaps
 
 ### Known Information
-- System components and basic function descriptions.
+- Components and their primary functions are identified.
+- Basic system interfaces and dependencies are understood.
 
 ### Assumptions
-- Default operational environments.
-- Sensor and motor specs remain as per typical components.
+- Generic operational environments assumed (e.g., indoor flat surfaces).
+- Typical component function expected without abnormal stress factors.
 
 ### Unknown Information
-- Exact battery voltage/current ratings.
-- Sensor model and range specifications.
-- Arduino software logic.
+- Battery specifications (voltage, capacity).
+- Exact environmental conditions affecting operation.
+- Detailed software logic and error handling mechanisms.
+- Sensor range and model-specific characteristics.
+
+### Information Needed
+- Vendor datasheets for sensor and motor driver.
+- Battery voltage profile and brownout thresholds.
+- Load characteristics and torque of motors.
+- Firmware structure and code logic for navigation.
 
 ### Information Gaps
-- Missing sensor specifications affect confidence in related failures.
-- Lack of detailed battery specs limits predictability of electrical faults.
-- Unspecified environmental conditions impact stress estimations.
+These gaps reduce confidence in evaluating the failure modes' occurrence likelihoods and detection capabilities, leading to reliance on heuristics in risk scoring.
 
 ## 5. Failure Analysis
 
 | Component/Function | Failure Mode | Cause | Immediate Effect | Downstream Effect | Existing Control | Severity | Occurrence | Detection | RPN | Score Rationales | Confidence |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Battery | Voltage sag | Faulty BMS | Power loss to system | System stops | Not specified | 8 (MEDIUM) | 6 (MEDIUM) | 5 (MEDIUM) | 240 | Robot stops affecting operation; plausible under load | MEDIUM |
-| Sensor | Max value output | Electrical interference | Invalid data to controller | Incorrect obstacle handling | Not specified | 8 (HIGH) | 5 (MEDIUM) | 6 (LOW) | 240 | Collision risk if undetected; plausible noise | LOW |
-| Arduino | Software crash | Bug, bad data | Controller stops processing | No control signals to motors | Not specified | 8 (HIGH) | 5 (LOW) | 4 (MEDIUM) | 160 | Stops unexpectedly due to data input | LOW |
-| Motor Driver | Overheating | High load | Temporary disable | Loss of motor control | Not specified | 7 (MEDIUM) | 6 (MEDIUM) | 4 (MEDIUM) | 168 | Overheating stops function, high load likely | MEDIUM |
-| Motor | Mechanical jam | Debris in gearbox | No motor rotation | Navigation drift | Not specified | 6 (MEDIUM) | 4 (MEDIUM) | 3 (MEDIUM) | 72 | Jam affects motion slightly likely | MEDIUM |
-| BMS | Communication failure | Electrical noise | Incorrect battery data | Poor battery management | Not specified | 7 (LOW) | 5 (LOW) | 6 (LOW) | 210 | May cause incorrect shutdown | LOW |
+| HC-SR04 Sensor | Outputs Max Distance | Faulty transducer | Invalid data to controller | Wrong navigation decision | Not specified | 8 - Collision likely (HIGH) | 5 - Noise plausible (MEDIUM) | 6 - Without range check (MEDIUM) | 240 | Severe collision risk, plausible occurrence without detection logic | MEDIUM |
+| HC-SR04 Sensor | Invalid Echo Response | Loose wiring | Data inconsistency | Erratic movement | Not specified | 6 - Degraded navigation (MEDIUM) | 6 - Wiring/issues possible (MEDIUM) | 5 - Lacks diagnostics (MEDIUM) | 180 | Erratic paths possible; requires error monitoring | MEDIUM |
+| Arduino Controller | Application Crash | Software bug | Control execution stops | Motors stop or erratic | Not specified | 7 - Erratic behavior possible (MEDIUM) | 4 - Unlikely unless specific (LOW) | 5 - Needs debugging (MEDIUM) | 140 | Rare crash, but effects complex to identify | LOW |
+| Arduino Controller | Brownout Reset | Voltage sag | Temporary logic loss | Control interruption | Not specified | 7 - Interrupts tasks (MEDIUM) | 5 - Voltage sag plausible (MEDIUM) | 4 - Can monitor (MEDIUM) | 140 | Occurrence unknown due to battery specs | MEDIUM |
+| Motor Driver | Continuous Current | Stuck signal | Power remains on | Overheating potential | Not specified | 9 - Fire risk (HIGH) | 3 - Rare setup needed (LOW) | 6 - Hard to detect (MEDIUM) | 162 | Severe but rare; challenging to pre-empty | LOW |
+| Motor Driver | Overheating | Excess load | Thermal limits exceeded | Inconsistent control | Not specified | 8 - Possible damage (MEDIUM) | 6 - Load fluctuations likely (MEDIUM) | 7 - Detection hard (LOW) | 336 | Needs testing under load | LOW |
+| DC Motor | Stalls Under Load | Mechanical overload | Heat buildup | Motor damage | Not specified | 7 - Immobilized risk (MEDIUM) | 5 - High load plausible (MEDIUM) | 5 - Requires sensing (MEDIUM) | 175 | Moderate impact on operation, detect by sensing | MEDIUM |
+| Battery | Voltage Sag | High discharge | Undervoltage | System resets | Not specified | 8 - Resets and control loss (MEDIUM) | 6 - High load possible (MEDIUM) | 4 - Voltage check possible (MEDIUM) | 192 | Vital for stability, easily detectable | MEDIUM |
 
 ## 6. Failure Propagation Analysis
 
-- **SENSOR → Constant max output → (invalid data) → CONTROLLER → Incorrect command → MOTOR DRIVER → Collision.**
-- **BATTERY → Voltage sag → (Arduino reset) → CONTROLLER → Loss of state → NAVIGATION → Uncontrolled motion.**
-- **MOTOR DRIVER → Output held enabled → (continuous power) → MOTOR → Continuous rotation → Collision/damage.**
+COMPONENT → FAILURE → INTERFACE / DEPENDENCY → NEXT COMPONENT → SYSTEM CONSEQUENCE:
+
+- **HC-SR04 Sensor** → Outputs Max Distance → (invalid data) → **Arduino Controller** → Wrong motion decision → **Motor Driver** → Collision
+- **Battery** → Voltage Sag → (undervoltage event) → **Arduino Controller** → Logic reset → **Navigation** → Uncontrolled motion
+- **Motor Driver** → Continuous Output → (overcurrent) → **DC Motor** → Overheating → Damage
 
 ## 7. Risk Assessment Method
 
-Severity, Occurrence, and Detection scores are AI-estimated based on available descriptions and engineering heuristics. RPN is calculated by Severity × Occurrence × Detection. Real reliability decisions require measurements and testing. Confidence level affects certainty, not probability.
+- **Severity:** Measures impact if failure occurs, not likelihood.
+- **Occurrence:** Estimates likelihood based on system and environment.
+- **Detection:** Ability to identify the failure before significant impact.
+- **RPN:** Product of Severity, Occurrence, and Detection.
+- **Confidence:** Reflects completeness of information, not likelihood.
+ 
+AI-estimated scores guide prioritization and require validation through engineering review, testing, or field experience. AI estimate ≠ measured reliability.
 
 ## 8. Risk Prioritization
 
-Highest RPN modes involve battery voltage sag and ultrasonic sensor max value output due to their potential for critical system impacts. These rank higher for collisions or uncontrolled behavior.
+Prioritized by highest RPN:
+1. **Motor Driver Overheating (RPN: 336):** Critical due to the possibility of hardware damage and difficulty in detection.
+2. **HC-SR04 Outputs Max Distance (RPN: 240):** High severity from potential collisions.
+3. **Battery Voltage Sag (RPN: 192):** Significant as it can lead to system resets.
+
+High-priority risks include those with critical impact potential and those difficult to detect.
 
 ## 9. Recommended Mitigations
 
-- **Failure Mode Addressed:** Battery Voltage Sag
-  - **Mitigation:** Implement voltage monitoring circuit on Arduino.
-  - **Why It Helps:** Detects low voltage early, preventing resets.
-  - **Control Added:** Software check and power disable logic.
-  - **Uncertainty / Validation Needed:** Requires calibration for actual voltage-sag behavior.
-
-- **Failure Mode Addressed:** Sensor Max Value Output
-  - **Mitigation:** Add sensor data range validation in software.
-  - **Why It Helps:** Detects invalid sensor data early.
-  - **Control Added:** Software validation routine.
-  - **Uncertainty / Validation Needed:** Requires vendor datasheets for range specification.
-
-- **Failure Mode Addressed:** Arduino Software Crash
-  - **Mitigation:** Implement watchdog timer for system reset.
-  - **Why It Helps:** Resets system upon software hang.
-  - **Control Added:** Hardware watchdog mechanism.
-  - **Uncertainty / Validation Needed:** Watchdog timeout requires adjustment based on software timing.
-
 - **Failure Mode Addressed:** Motor Driver Overheating
-  - **Mitigation:** Add thermal monitoring to motor driver.
-  - **Why It Helps:** Prevents overheating by reducing load.
-  - **Control Added:** Thermal cutoff circuit.
-  - **Uncertainty / Validation Needed:** Thermal testing under operational load required.
+  - **Mitigation:** Implement a thermal shutdown using a sensor and control logic to disable motors when overheating.
+  - **Why It Helps:** Reduces severity, prevents damage by stopping power in overheating.
+  - **Control Added:** Temperature monitoring circuit with shutdown routine.
+  - **Uncertainty:** Requires testing with actual temperature conditions to determine shutdown threshold.
 
-- **Failure Mode Addressed:** BMS Communication Failure
-  - **Mitigation:** Add robust error-checking in communication protocol.
-  - **Why It Helps:** Ensures correct battery status is communicated.
-  - **Control Added:** Software error-check routine.
-  - **Uncertainty / Validation Needed:** Requires testing under noisy conditions.
+- **Failure Mode Addressed:** HC-SR04 Outputs Max Distance
+  - **Mitigation:** Implement sensor data range validation in Arduino code to reject out-of-range readings.
+  - **Why It Helps:** Detects invalid readings, reducing false commands to motors.
+  - **Control Added:** Software validation routine.
+  - **Uncertainty:** Requires sensor range specification.
+
+- **Failure Mode Addressed:** Battery Voltage Sag
+  - **Mitigation:** Add voltage monitoring and alert system in the Arduino firmware.
+  - **Why It Helps:** Provides early warning of low voltage to prevent sudden resets.
+  - **Control Added:** Voltage monitoring circuit with LED/serial alert.
+  - **Uncertainty:** Voltage profile needs empirical measurement under load.
+
+- **Failure Mode Addressed:** Motor Driver Continuous Current
+  - **Mitigation:** Use watchdog timer circuit to reset driver power upon detecting PWM signal issues.
+  - **Why It Helps:** Limits duration of uncontrolled current flow.
+  - **Control Added:** Hardware watchdog for PWM control lines.
+  - **Uncertainty:** Timeout values require empirical validation.
+
+- **Failure Mode Addressed:** Arduino Controller Brownout Reset
+  - **Mitigation:** Implement power-reset management circuits to ensure orderly shutdown and recovery.
+  - **Why It Helps:** Prevents abrupt resets affecting control logic.
+  - **Control Added:** Circuit to manage power restoration.
+  - **Uncertainty:** Empirical validation necessary to determine threshold.
 
 ## 10. Verification Tests
 
-### Battery Voltage Monitoring Test
-Test Objective: Verify the system detects low voltage and disables motor power.
-Setup: Connect voltage monitoring circuit. Use a variable power supply to simulate voltage drop.
-Procedure: 
-1. Apply power and monitor through Arduino, simulate voltage drop.
-2. Observe Arduino response at low voltage.
-3. Ensure motors stop before critical voltage threshold.
-Expected Safe Behavior: Motor power disables before voltage drops below set threshold, preventing reset.
-Pass Criterion: Motors stop within specified voltage drop limit.
+### Test Name: Motor Driver Thermal Shutdown
 
-### Sensor Data Validation Test
-Test Objective: Validate sensor data range check prevents invalid readings from driving logic.
-Setup: Inject invalid data via serial.
-Procedure:
-1. Simulate out-of-range values to Arduino.
-2. Monitor motor control signals.
-Expected Safe Behavior: Motors should stop after consecutive invalid readings.
-Pass Criterion: Motor control signals transition to zero within defined time after third invalid reading.
+Test Objective:
+Verify that motor driver stops power delivery when overheating.
 
-### Watchdog Timer Implementation Test
-Test Objective: Verify the watchdog timer resets Arduino on software crash.
-Setup: Use a test rig with watchdog timer.
-Procedure:
-1. Induce software hang.
-2. Verify Arduino reset via timer.
-Expected Safe Behavior: Watchdog triggers reset within configured time.
-Pass Criterion: System resets without manual intervention following hang.
+Setup:
+Place thermal sensors on driver chip. Connect shutdown circuit in setup. Raise robot on a test stand.
 
-### Motor Driver Thermal Test
-Test Objective: Confirm thermal monitoring halts motor operation on overheating.
-Setup: Attach thermal sensors.
 Procedure:
-1. Run motor under load.
-2. Monitor temperature.
-Expected Safe Behavior: System reduces performance or stops before overheating.
-Pass Criterion: Motor shuts down within safe thermal limits.
+1. Energize motors at full load and monitor temperature.
+2. Simulate thermal limits to trigger shutdown.
+3. Confirm motor power stops within expected time.
 
-### BMS Communication Validation Test
-Test Objective: Verify communication protocol detects errors.
-Setup: Simulate noise on communication line.
+Expected Safe Behavior:
+Motor power stops when temperature exceeds set threshold.
+
+Pass Criterion:
+Motor power is disabled below threshold temperature within 500 ms.
+
+### Test Name: Sensor Data Range Validation
+
+Test Objective:
+Verify sensor range validation prevents incorrect navigation decisions.
+
+Setup:
+Raise robot, use serial port for test data input. Monitor motor control lines.
+
 Procedure:
-1. Introduce signal noise.
-2. Verify error detection and correction.
-Expected Safe Behavior: System operates with noise-resilient communication.
-Pass Criterion: Correct battery status retained under noisy conditions.
+1. Inject out-of-range distance via serial.
+2. Observe motor control responses to invalid data.
+3. Check for correct motor stop logic activation.
+
+Expected Safe Behavior:
+Motors stop upon detecting invalid readings.
+
+Pass Criterion:
+Motors cease power within specified time post-invalid data input.
+
+### Test Name: Voltage Monitoring Alert
+
+Test Objective:
+Verify voltage alert system operates correctly to prevent brownouts.
+
+Setup:
+Use voltage divider for battery level input, connect alert system to Arduino.
+
+Procedure:
+1. Simulate voltage drop across battery supply.
+2. Observe alert activations (LED/serial output).
+3. Verify control logic halts motors on alert.
+
+Expected Safe Behavior:
+Alert activates with timely warning, stopping motors.
+
+Pass Criterion:
+Alert triggers below set voltage, halting motors successfully.
+
+### Test Name: PWM Signal Watchdog
+
+Test Objective:
+Verify watchdog resets PWM signal controlling motor driver.
+
+Setup:
+Configure watchdog timer circuit to reset on PWM signal timeout.
+
+Procedure:
+1. Monitor PWM signal under normal conditions.
+2. Simulate signal loss to activate watchdog.
+3. Check reset and motor state post-watchdog trigger.
+
+Expected Safe Behavior:
+PWM control should reset, disabling driver power.
+
+Pass Criterion:
+Motor power stops within set delay after signal loss.
+
+### Test Name: Power-Reset Management
+
+Test Objective:
+Verify orderly system behavior on power restoration.
+
+Setup:
+Implement power-reset management on Arduino, monitor reset behavior.
+
+Procedure:
+1. Run control logic while dropping power.
+2. Restore power and observe system response.
+3. Check for proper recovery and continuity.
+
+Expected Safe Behavior:
+System restarts smoothly, maintaining control state.
+
+Pass Criterion:
+System resumes operation without errors or interruptions.
 
 ## 11. Engineering Limitations
 
-Severity, Occurrence, and Detection scores are AI-estimated based on the available system description and general engineering heuristics. They are a starting point for engineering review and are not measured or validated reliability data. AI estimate ≠ measured reliability; further testing and verification are essential. Some assumptions due to missing specs may affect precision.
+Severity, Occurrence, and Detection scores are AI-estimated based on the available system description and general engineering heuristics. They are a starting point for engineering review and are not measured or validated reliability data. AI estimate ≠ measured reliability; further testing and review are essential.
+
+Real reliability decisions must be supported by testing or historical data. Analysis limited by missing specs such as battery voltage and thermal ratings. Assumptions in confidence levels influence accuracy and applicability.
 
 ## 12. Conclusion
 
-The most critical risks involve battery voltage instability and sensor data inaccuracies, causing potential system failures. Recommended steps include implementing monitoring and validation mechanisms alongside rigorous testing. AI-estimated scores are preliminary and must be confirmed through empirical measurements and analyses before making definitive reliability conclusions.
-
-> Severity, Occurrence, and Detection scores are AI-estimated based on the available system description and general engineering heuristics. They are a starting point for engineering review and are not measured or validated reliability data. AI estimate ≠ measured reliability; further testing and review are essential.
+The highest-priority risks involve power management and sensor data integrity. Immediate focus should be on implementing effective monitoring and validation routines. Future steps involve empirical testing to fine-tune thresholds and validate controls. AI-estimated scores are for initial prioritization and need confirmation by real-world measurements and field data.
