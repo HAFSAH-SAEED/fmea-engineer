@@ -343,7 +343,13 @@ cd fmea-engineer
 cd frontend
 npm install
 
-### 3. Run the Development Server
+### 3. Configure Environment Variables
+
+Create:
+
+frontend/.env
+
+### 4. Run the Development Server
 
 npm run dev
 
@@ -351,7 +357,7 @@ The application will normally be available at:
 
 http://localhost:3000
 
-### 4. Open the Analysis Interface
+### 5. Open the Analysis Interface
 
 Navigate to:
 
