@@ -4,11 +4,21 @@
 
 > "Engineering becomes more powerful when AI can help us reason about how systems fail."
 
-FMEA Engineer is an **AI-assisted engineering analysis tool** I built to explore the intersection of **Computer Engineering, AI, embedded systems, and robotics**.
+FMEA Engineer is an **AI-assisted engineering analysis tool** built to explore the intersection of **Computer Engineering, AI, embedded systems, and robotics**.
 
-It transforms an engineering system description into a structured **Failure Mode and Effects Analysis (FMEA)**. Using **Python and Backboard**, the system identifies potential failures, traces how they propagate through the system, prioritizes risks, and recommends mitigation and verification approaches.
+It transforms an engineering system description into a structured **Failure Mode and Effects Analysis (FMEA)**. The system uses AI-assisted reasoning to identify potential failures, analyze how failures propagate through interconnected components, prioritize risks, and recommend mitigation and verification strategies.
 
-The reference system is an **Arduino autonomous robot** using an ultrasonic sensor, Arduino controller, L298N motor driver, DC motors, and battery.
+The project is designed around a practical engineering scenario: an **autonomous Arduino-based robot** using an ultrasonic sensor, Arduino controller, L298N motor driver, DC motors, battery, voltage regulation, and embedded control software.
+
+---
+
+## Product Preview
+
+### Landing Page
+
+![FMEA Engineer landing page](docs/screenshots/hero.png)
+
+---
 
 ## Why I Built This
 
@@ -16,93 +26,298 @@ I wanted to explore how AI could be applied to a real engineering problem rather
 
 In an engineering system, one component failure can affect several other components. FMEA Engineer focuses on understanding these relationships and following a failure from its initial cause to its possible system-level consequence.
 
-I wanted the system to answer questions such as:
+The system is designed to answer questions such as:
 
-* What can fail?
-* Why can it fail?
-* What happens when it fails?
-* How can the risk be prioritized?
-* How could the failure be safely verified?
-* What information is still unknown?
+- What can fail?
+- Why can it fail?
+- What happens when it fails?
+- How can the risk be prioritized?
+- How could the failure be safely verified?
+- What information is still unknown?
+
+---
 
 ## Workflow
 
-```text
-System Description
-        ↓
-System Decomposition
-        ↓
-Failure Modes & Propagation
-        ↓
-Risk Assessment
-        ↓
-Mitigation & Verification
-        ↓
+System Description  
+↓  
+System Decomposition  
+↓  
+Failure Mode Identification  
+↓  
+Failure Propagation Analysis  
+↓  
+Risk Assessment  
+↓  
+Risk Prioritization  
+↓  
+Mitigation Generation  
+↓  
+Verification Strategy  
+↓  
 Engineering Report
-```
 
-A shared **Backboard thread** is used across the reasoning stages so that each stage builds on the previous analysis.
+A shared **Backboard thread** is used across the reasoning stages so that each stage can build on the previous analysis rather than treating each reasoning step as an isolated request.
+
+---
 
 ## Example Failure Propagation
 
-```text
-Sensor Failure
-      ↓
-Invalid Data
-      ↓
-Controller Decision
-      ↓
-Motor Driver
-      ↓
-Motor Output
-      ↓
+Sensor Failure  
+↓  
+Invalid Data  
+↓  
+Controller Decision  
+↓  
+Motor Driver  
+↓  
+Motor Output  
+↓  
 System Consequence
-```
 
-This allows the analysis to consider not only individual component failures, but also how failures can propagate through an interconnected system.
+This allows the analysis to consider not only individual component failures, but also how failures can propagate through interconnected components and interfaces.
+
+---
 
 ## Key Features
 
-* System decomposition and dependency analysis
-* AI-assisted failure mode identification
-* Failure propagation analysis
-* Severity, Occurrence, and Detection assessment
-* Risk Priority Number (RPN) calculation
-* Risk prioritization
-* Engineering mitigation recommendations
-* Safe verification planning
-* Explicit assumptions and information gaps
-* Automated Markdown report generation
+- System decomposition and dependency analysis
+- AI-assisted failure mode identification
+- Failure propagation analysis
+- Severity, Occurrence, and Detection assessment
+- Risk Priority Number (RPN) calculation
+- Risk prioritization
+- Engineering mitigation recommendations
+- Verification strategy generation
+- Explicit assumptions and information gaps
+- Automated Markdown engineering report
+- Interactive web-based analysis interface
+- AI-generated engineering reasoning through Backboard
+
+---
 
 ## Risk Assessment
 
-The system evaluates:
+The system evaluates three core FMEA factors:
 
-* **Severity**
-* **Occurrence**
-* **Detection**
-* **Risk Priority Number (RPN)**
+- **Severity (S)**
+- **Occurrence (O)**
+- **Detection (D)**
 
-```text
-RPN = Severity × Occurrence × Detection
-```
+The Risk Priority Number is calculated as:
 
-The scores are **AI-assisted engineering estimates**, not measured reliability data.
+**RPN = Severity × Occurrence × Detection**
+
+The resulting RPN values are used to help prioritize failure modes that may require greater engineering attention.
+
+### Important Engineering Disclaimer
+
+The Severity, Occurrence, and Detection values generated by the system are **AI-assisted engineering estimates**.
+
+They are not measured reliability data and should not be treated as a substitute for:
+
+- Engineering review
+- Physical testing
+- Component datasheets
+- Historical reliability data
+- Safety validation
+- Formal engineering certification
+
+AI-generated risk estimates require **human engineering validation** before being used for real-world engineering decisions.
+
+---
 
 ## Technology Stack
 
-* Python
-* Backboard SDK
-* Backboard Assistant
-* Backboard Threads
-* Markdown
+### Frontend
 
-The project applies concepts from **FMEA, embedded systems, robotics, sensor systems, motor control, risk analysis, and engineering verification**.
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- React Markdown
+- remark-gfm
+
+### AI Backend
+
+- Backboard API / SDK
+- Backboard Assistant
+- Shared Backboard Threads
+
+### Engineering Concepts
+
+- Failure Mode and Effects Analysis (FMEA)
+- Failure propagation
+- Risk assessment
+- Embedded systems
+- Robotics
+- Sensor systems
+- Motor control
+- Power systems
+- Engineering verification
+
+---
+
+## System Architecture
+
+User  
+↓  
+Engineering System Description  
+↓  
+Next.js Frontend  
+↓  
+POST /api/analyze  
+↓  
+FMEA Analysis API  
+↓  
+Backboard AI  
+↓  
+System Decomposition  
+↓  
+Failure Identification  
+↓  
+Propagation Analysis  
+↓  
+Risk Prioritization  
+↓  
+Mitigation Generation  
+↓  
+Verification Strategy  
+↓  
+Engineering Report  
+↓  
+Markdown-rendered FMEA Results
+
+---
+
+## Reference Engineering System
+
+The primary reference system used during development is an autonomous Arduino-based robot consisting of:
+
+- Arduino controller
+- HC-SR04 ultrasonic sensor
+- L298N motor driver
+- DC geared motors
+- Rechargeable battery
+- Voltage regulation / power distribution
+- Embedded control software
+- Chassis and wheels
+
+The robot uses ultrasonic distance measurements to detect obstacles and modify its movement through the Arduino control system and motor driver.
+
+---
+
+## Example Engineering Analysis
+
+A typical failure chain can be represented as:
+
+Battery Voltage Sag  
+↓  
+Voltage Instability  
+↓  
+Arduino Brownout / Reset  
+↓  
+Loss of Control Logic  
+↓  
+Motor Command Interruption  
+↓  
+Navigation Failure
+
+Another example:
+
+Ultrasonic Sensor Failure  
+↓  
+Invalid Distance Reading  
+↓  
+Incorrect Controller Decision  
+↓  
+Incorrect Motor Command  
+↓  
+Unexpected Robot Movement  
+↓  
+Potential Collision
+
+The system attempts to reason about these chains rather than evaluating each component completely independently.
+
+---
+
+## Engineering Report
+
+The generated analysis report can contain sections such as:
+
+- System Overview
+- System Components and Functions
+- Interfaces and Dependencies
+- Assumptions and Information Gaps
+- Failure Analysis
+- Failure Propagation Analysis
+- Risk Assessment Method
+- Risk Prioritization
+- Recommended Mitigations
+- Verification Tests
+- Engineering Limitations
+- Conclusion
+
+The report is generated in Markdown and can be reviewed as an engineering analysis document.
+
+---
+
+## Information Gaps
+
+FMEA Engineer explicitly identifies missing information rather than silently inventing engineering specifications.
+
+Examples include:
+
+- Battery voltage and capacity
+- Sensor operating range
+- Motor ratings
+- Motor-driver current and thermal ratings
+- Voltage-regulation characteristics
+- Firmware and control logic
+- Environmental conditions
+- Load and torque characteristics
+- Component-specific failure history
+
+These information gaps can reduce confidence in occurrence and detection estimates.
+
+---
+
+## Engineering Limitations
+
+The quality of an FMEA depends heavily on the quality of the available system information.
+
+When detailed specifications, operating conditions, failure history, or test data are unavailable, the system relies on engineering reasoning and heuristic estimates.
+
+Therefore:
+
+> **AI estimate ≠ measured reliability**
+
+The generated analysis should be treated as an engineering decision-support tool and starting point for further investigation.
+
+Real reliability and safety decisions should be supported by appropriate testing, engineering review, and validated data.
+
+---
 
 ## Project Structure
 
-```text
 fmea-engineer/
+├── frontend/
+│   ├── app/
+│   │   ├── page.tsx
+│   │   ├── analysis/
+│   │   │   └── page.tsx
+│   │   └── api/
+│   │       └── analyze/
+│   ├── components/
+│   │   ├── Hero.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── EngineeringGrid.tsx
+│   │   ├── EngineeringPrinciples.tsx
+│   │   ├── FinalCTA.tsx
+│   │   ├── Footer.tsx
+│   │   └── Workflow.tsx
+│   ├── package.json
+│   └── ...
 ├── fmea_engineer.py
 ├── debug_run.py
 ├── assistant.json
@@ -110,59 +325,92 @@ fmea-engineer/
 ├── quality_checks.txt
 ├── README.md
 └── .gitignore
-```
+
+---
 
 ## Getting Started
 
-### Install Dependencies
+### 1. Clone the Repository
 
-```bash
-pip install backboard-sdk
-```
+git clone https://github.com/HAFSAH-SAEED/fmea-engineer.git
+cd fmea-engineer
 
-### Run the Analysis
+### 2. Install Frontend Dependencies
 
-```powershell
-python fmea_engineer.py "Arduino autonomous robot using an ultrasonic sensor, Arduino controller, L298N motor driver, DC motors, and battery"
-```
+cd frontend
+npm install
 
-The generated report is saved as:
+### 3. Configure Environment Variables
 
-```text
-fmea-report.md
-```
+Create:
 
-## Engineering Limitations
+frontend/.env
 
-The analysis depends on the information provided about the system.
+Add the required Backboard credentials to the environment variables.
 
-Unknown specifications are treated as **information gaps rather than invented values**.
+**Never commit API keys or secrets to GitHub.**
 
-Examples include:
+### 4. Run the Development Server
 
-* Battery specifications
-* Sensor model and range
-* Motor ratings
-* Motor-driver ratings
-* Thermal limits
-* Firmware and control logic
-* Environmental conditions
+npm run dev
 
-This project supports **engineering reasoning**, but it does not replace engineering review, physical testing, or safety certification.
+The application will normally be available at:
+
+http://localhost:3000
+
+### 5. Open the Analysis Interface
+
+Navigate to:
+
+http://localhost:3000/analysis
+
+Enter an engineering system description and select:
+
+Run FMEA Analysis
+
+The application sends the analysis request to the backend and renders the generated engineering report.
+
+---
+
+## Example Input
+
+Autonomous Arduino robot with an HC-SR04 ultrasonic sensor, L298N motor driver, two DC motors, rechargeable battery, voltage regulation, and embedded control software.
+
+The system can use this description to generate a structured FMEA covering system decomposition, failure modes, propagation, risk prioritization, mitigation, and verification.
+
+---
 
 ## Future Development
 
-* Interactive engineering interface
-* Failure-propagation visualization
-* Risk dashboards
-* Support for additional robotic and embedded systems
-* Integration with real engineering test data
+Potential future improvements include:
+
+- Interactive failure-propagation visualization
+- Engineering risk dashboards
+- More advanced risk filtering
+- Additional robotic and embedded-system templates
+- Integration with real engineering test data
+- Historical FMEA comparison
+- Improved failure detection modeling
+- Export to professional engineering formats
+- More detailed component-level reliability analysis
+
+---
 
 ## What This Project Represents
 
-FMEA Engineer is part of my exploration of how **AI can be combined with Computer Engineering and robotics to solve practical engineering problems**.
+FMEA Engineer is an exploration of how **AI can be combined with Computer Engineering and robotics to solve practical engineering problems**.
 
-Rather than treating AI as only a coding assistant, this project explores its potential as a tool for **structured engineering reasoning and decision support**.
+Rather than treating AI only as a coding assistant, this project explores its potential as a tool for:
+
+- Structured engineering reasoning
+- Failure analysis
+- Risk prioritization
+- Decision support
+- Engineering verification planning
+
+The goal is to bridge AI-assisted reasoning with real engineering workflows.
+
+---
 
 ## Author
 
@@ -171,3 +419,13 @@ Rather than treating AI as only a coding assistant, this project explores its po
 Computer Engineering | AI | Embedded Systems | Robotics
 
 **Built to explore the intersection of AI-assisted reasoning and engineering decision-making.**
+
+---
+
+## Disclaimer
+
+FMEA Engineer is an experimental AI-assisted engineering analysis tool.
+
+The generated results, risk scores, recommendations, and verification strategies are not a substitute for qualified engineering judgment, physical testing, safety analysis, or certification.
+
+**Human engineering validation is required before applying generated results to real-world systems.**
