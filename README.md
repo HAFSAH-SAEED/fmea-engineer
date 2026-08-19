@@ -353,16 +353,6 @@ frontend/.env
 
 npm run dev
 
-The application will normally be available at:
-
-http://localhost:3000
-
-### 5. Open the Analysis Interface
-
-Navigate to:
-
-http://localhost:3000/analysis
-
 Enter an engineering system description and select:
 
 Run FMEA Analysis
